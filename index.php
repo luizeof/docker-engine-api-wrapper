@@ -25,10 +25,10 @@ $endurl =  (count($vars) > 0) ? $path . '?' . http_build_query($vars) : $path;
 $url = 'http:/APIVER' . $endurl;
 
 $command = new Command(array(
-    'command' => '/usr/bin/curl'
+    'execCommand' => '/usr/bin/curl'
 ));
 
-$command->escapeArgs = false;
+$command->setOptions(array("escapeArgs" => false, "useExec" => true));
 
 $command->addArg('--unix-socket', '/var/run/docker.sock');
 
