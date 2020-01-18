@@ -37,9 +37,8 @@ endif;
 
 $command->addArg($url);
 
-$command->addArg('-H', '"Content-Type: application/json"');
-
-if (empty($body)) :
+if (!empty($body) && $method == 'POST') :
+    $command->addArg('-H', '"Content-Type: application/json"');
     $command->addArg('-d', $body);
 endif;
 
