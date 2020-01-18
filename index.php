@@ -17,8 +17,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 $body = file_get_contents('php://input');
 
-$url = 'APIVER/' . (count($vars) > 0) ? $path . http_build_query($vars) : $path;
+$url =  (count($vars) > 0) ? $path . http_build_query($vars) : $path;
 
 echo $url;
 
-echo shell_exec('curl --unix-socket /var/run/docker.sock ' . $url);
+echo shell_exec('curl --unix-socket /var/run/docker.sock ' . 'APIVER' . $url);

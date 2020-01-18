@@ -7,9 +7,9 @@ htpasswd -cb /var/www/.htpasswd $AUTHUSER $AUTHPWD
 
 chown -R www-data:www-data /var/www/.htpasswd
 
-ver=$(curl -s --unix-socket /var/run/docker.sock http:/info/version | jq .ApiVersion)
+ver=$(curl -s --unix-socket /var/run/docker.sock http:/info/version | jq .ApiVersion | tr -d '"')
 
-sed 's/APIVER/$ver/g' /var/www/html/index.php
+sed -i "s/APIVER/$ver/g" /var/www/html/index.php
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
