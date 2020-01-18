@@ -29,8 +29,6 @@ $command = new Command(array(
     'command' => '/usr/bin/curl'
 ));
 
-// Add arguments with correct escaping:
-// results in --name='d'\''Artagnan'
 $command->addArg('--unix-socket', '/var/run/docker.sock');
 
 if ($method == 'POST') :
@@ -39,15 +37,20 @@ endif;
 
 $command->addArg($url);
 
-// Add argument with several values
-// results in --keys key1 key2
 $command->addArg('-H', '"Content-Type: application/json"');
 
 $command->addArg('-d', $body);
 
 if ($command->execute()) {
-    echo $command->getOutput();
+    $exitCode = $command->getExitCode();
 } else {
-    echo $command->getError();
     $exitCode = $command->getExitCode();
 }
+
+if ($exitCode > 0) :
+    http_response_code(500);
+    echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
+else :
+    http_response_code(200);
+    echo $command->getOutput();
+endif;
