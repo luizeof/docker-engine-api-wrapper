@@ -6,6 +6,8 @@ LABEL version="1.0.0"
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get update && apt-get install jq && apt-get clean
+
 RUN a2enmod rewrite headers
 
 COPY index.php /var/www/html/index.php
