@@ -2,7 +2,6 @@
 
 class DockerManager
 {
-    const DOCKER_SOCKET = '/var/run/docker.sock';
 
     const WORKING_DIR = '/var/www/html';
 
@@ -13,15 +12,6 @@ class DockerManager
         $this->ver = $_ver;
     }
 
-    private function curl_prepare(&$ch, $method = 'POST')
-    {
-        curl_setopt($ch, CURLOPT_UNIX_SOCKET_PATH, static::DOCKER_SOCKET);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        if ('POST' === $method) {
-            curl_setopt($ch, CURLOPT_POST, 1);
-        }
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    }
 
     public function make($method, $path, $args = array(), $json = null)
     {
@@ -31,13 +21,18 @@ class DockerManager
         }
 
         $ch = curl_init();
-        $this->curl_prepare($ch, $method);
-        curl_setopt($ch, CURLOPT_URL, "http:/{$this->ver}/{$path}{$vars}");
+        curl_setopt($ch, CURLOPT_UNIX_SOCKET_PATH, '/var/run/docker.sock');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        if ('POST' === $method) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, "http://unixsocket{$this->ver}/{$path}{$vars}");
         if ('POST' === $method) :
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
         endif;
         try {
-            $response = json_decode(curl_exec($ch));
+            $response = curl_exec($ch);
             echo $response;
             http_response_code(200);
         } catch (Exception $e) {
@@ -50,7 +45,7 @@ class DockerManager
 
 $params = $_REQUEST;
 
-$path = array_keys($_REQUEST)[0];
+$path = '/' . array_keys($_REQUEST)[0];
 
 array_splice($_REQUEST, 0, 1);
 
