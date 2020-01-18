@@ -10,7 +10,7 @@ RUN apt-get update
 
 EXPOSE 80
 
-RUN mkdir -m /var/www
+RUN mkdir -p /var/www
 
 RUN htpasswd -cb /var/www/.htpasswd ${AUTHUSER} ${AUTHPWD}
 
