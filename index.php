@@ -117,7 +117,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 $body = file_get_contents('php://input');
 
-$client = new DockerClient('/var/run/docker.sock');
+$client = new DockerClient('unix:///var/run/docker.sock');
 
 $url = (count($vars) > 0) ? $path . http_build_query($vars) : $path;
 
