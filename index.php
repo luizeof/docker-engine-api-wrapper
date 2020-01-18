@@ -20,9 +20,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 $body = file_get_contents('php://input');
 
-$url =  (count($vars) > 0) ? $path . '?' . http_build_query($vars) : $path;
+$endurl =  (count($vars) > 0) ? $path . '?' . http_build_query($vars) : $path;
 
-$url = 'http:/APIVER' . $url;
+$url = 'http:/APIVER/' . $endurl;
 
 $command = new Command(array(
     'command' => '/usr/bin/curl'
@@ -42,6 +42,8 @@ if (!empty($body) && $method == 'POST') :
 endif;
 
 if (isset($params["debug"])) :
+
+    header('Content-Type:text/plain');
 
     echo $command->getExecCommand();
 
