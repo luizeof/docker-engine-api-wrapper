@@ -3,6 +3,8 @@ set -e
 
 chown -R www-data:www-data /var/www/html
 
+chmod +777 /var/run/docker.sock
+
 htpasswd -cb /var/www/.htpasswd $AUTHUSER $AUTHPWD
 
 chown -R www-data:www-data /var/www/.htpasswd
