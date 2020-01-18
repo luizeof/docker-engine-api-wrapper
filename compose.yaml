@@ -1,0 +1,9 @@
+docker_engine_api:
+  container_name: docker_engine_api
+  image: luizeof/dockerengineapi
+  environment:
+    - AUTHUSER=myuser
+    - AUTHPWD=mypwd
+  restart: always
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
