@@ -63,6 +63,9 @@ class DockerClient
      */
     public function dispatchCommand(string $method, string $endpoint,  $parameters = null): array
     {
+
+        echo $this->generateRequestUri($endpoint);
+
         curl_setopt($this->curlClient, CURLOPT_URL, $this->generateRequestUri($endpoint));
 
         if ($method == 'POST') {
@@ -96,7 +99,6 @@ class DockerClient
 $params = $_REQUEST;
 
 $path = array_keys($_REQUEST)[0];
-echo $path;
 
 array_splice($_REQUEST, 0, 1);
 
