@@ -6,8 +6,6 @@ LABEL version="1.0.0"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update
-
 EXPOSE 80
 
 RUN mkdir -p /var/www
