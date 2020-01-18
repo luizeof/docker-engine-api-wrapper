@@ -112,4 +112,6 @@ $client = new DockerClient('/var/run/docker.sock');
 
 $url = (count($vars) > 0) ? $path . http_build_query($vars) : '';
 
+echo $url;
+
 $client->dispatchCommand($method, $url, $body);
