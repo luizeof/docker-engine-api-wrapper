@@ -1,49 +1,93 @@
 <?php
 
-class DockerManager
+class DockerClient
 {
 
-    const WORKING_DIR = '/var/www/html';
+    /** @param resource */
+    private $curlClient;
 
-    private $ver;
+    /** @param string */
+    private $socketPath;
 
-    function __construct($_ver = 'v1.26')
+    /** @param string|null */
+    private $curlError = null;
+
+    /**
+     * Constructor: Initialises the Curl Resource, making it usable for subsequent
+     *  API requests.
+     *
+     * @param string
+     */
+    public function __construct(string $socketPath)
     {
-        $this->ver = $_ver;
+        $this->curlClient = curl_init();
+        $this->socketPath = $socketPath;
+
+        curl_setopt($this->curlClient, CURLOPT_UNIX_SOCKET_PATH, $socketPath);
+        curl_setopt($this->curlClient, CURLOPT_RETURNTRANSFER, true);
+    }
+
+    /**
+     * Deconstructor: Ensure the Curl Resource is correctly closed.
+     */
+    public function __destruct()
+    {
+        curl_close($this->curlClient);
+    }
+
+    private function generateRequestUri(string $requestPath)
+    {
+        /* Please note that Curl doesn't use http+unix:// or any other mechanism for
+         *  specifying Unix Sockets; once the CURLOPT_UNIX_SOCKET_PATH option is set,
+         *  Curl will simply ignore the domain of the request. Hence why this works,
+         *  despite looking as though it should attempt to connect to a host found at
+         *  the domain "unixsocket". See L14 where this is set.
+         *
+         *  @see Client.php:L14
+         *  @see https://github.com/curl/curl/issues/1338
+         */
+        return sprintf("http://unixsocket%s", $requestPath);
     }
 
 
-    public function make($method, $path, $args = array(), $json = null)
+    /**
+     * Dispatches a command - via Curl - to Commander's Unix Socket.
+     *
+     * @param  string Docker Engine endpoint to hit.
+     * @param  array  Data to post to $endpoint.
+     * @return array  JSON decoded response from Commander.
+     */
+    public function dispatchCommand(string $method, string $endpoint,  $parameters = null): array
     {
-        $vars = "";
-        if (count($args) > 0) {
-            $vars = '?' . http_build_query($args);
+        curl_setopt($this->curlClient, CURLOPT_URL, $this->generateRequestUri($endpoint));
+
+        if ($method == 'POST') {
+            $payload = ($parameters);
+            curl_setopt($this->curlClient, CURLOPT_POSTFIELDS, $payload);
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_UNIX_SOCKET_PATH, '/var/run/docker.sock');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        if ('POST' === $method) {
-            curl_setopt($ch, CURLOPT_POST, 1);
+        $result = curl_exec($this->curlClient);
+
+        if ($result === FALSE) {
+            $this->curlError = curl_error($this->curlClient);
+            return array();
         }
-        $url = "http:/{$this->ver}/{$path}{$vars}";
-        echo $url;
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        if ('POST' === $method) :
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
-        endif;
-        try {
-            $response = curl_exec($ch);
-            echo $response;
-            http_response_code(200);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            http_response_code(500);
-        }
-        curl_close($ch);
+
+        echo $result;
+    }
+
+
+    /**
+     * Returns a human readable string from Curl in the event of an error.
+     *
+     * @return bool|string 
+     */
+    public function getCurlError()
+    {
+        return is_null($this->curlError) ? false : $this->curlError;
     }
 }
+
 
 $params = $_REQUEST;
 
@@ -60,6 +104,8 @@ echo $method;
 $body = file_get_contents('php://input');
 echo $body;
 
-$docker_manager = new DockerManager();
+$client = new DockerClient('/var/run/docker.sock');
 
-$docker_manager->make($method, $path, $vars, $body);
+$url = (count($vars) > 0) ? $path . http_build_query($vars) : '';
+
+$client->dispatchCommand($method, $url, $body);
