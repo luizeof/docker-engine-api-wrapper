@@ -21,7 +21,7 @@ $url =  (count($vars) > 0) ? $path . http_build_query($vars) : $path;
 
 //echo $url;
 
-$cmd = 'curl --unix-socket /var/run/docker.sock ' . 'APIVER' . $url;
+$cmd = 'curl -s --unix-socket /var/run/docker.sock ' . '/APIVER/' . $url;
 
 echo $cmd;
 
