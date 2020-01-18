@@ -28,6 +28,8 @@ $command = new Command(array(
     'command' => '/usr/bin/curl'
 ));
 
+$command->escapeArgs = false;
+
 $command->addArg('--unix-socket', '/var/run/docker.sock');
 
 if ($method == 'POST') :
@@ -38,7 +40,7 @@ $command->addArg($url);
 
 if (!empty($body) && $method == 'POST') :
     $command->addArg('-H', '"Content-Type: application/json"');
-    $command->addArg('-d', $body);
+    $command->addArg('-d', "'" . $body . "'");
 endif;
 
 if (isset($params["debug"])) :
