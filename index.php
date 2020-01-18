@@ -25,4 +25,6 @@ $cmd = '/usr/bin/curl -s --unix-socket /var/run/docker.sock ' . 'http:/APIVER/' 
 
 echo $cmd;
 
-echo shell_exec($cmd);
+exec($cmd, $out);
+
+echo $out;
