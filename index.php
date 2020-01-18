@@ -46,14 +46,17 @@ class DockerManager
 $params = $_REQUEST;
 
 $path = '/' . array_keys($_REQUEST)[0];
+echo $path;
 
 array_splice($_REQUEST, 0, 1);
 
 $vars = $_REQUEST;
 
 $method = $_SERVER['REQUEST_METHOD'];
+echo $method;
 
 $body = file_get_contents('php://input');
+echo $body;
 
 $docker_manager = new DockerManager();
 
