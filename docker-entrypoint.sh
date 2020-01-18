@@ -9,7 +9,7 @@ chown -R www-data:www-data /var/www/.htpasswd
 
 ver=$(curl -s --unix-socket /var/run/docker.sock http:/info/version | jq .ApiVersion | tr -d '"')
 
-sed -i "s/APIVER/$ver/g" /var/www/html/index.php
+sed -i "s/APIVER/v$ver/g" /var/www/html/index.php
 
 echo 'safe_mode=Off' >/usr/local/etc/php/conf.d/safe.ini
 

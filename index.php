@@ -22,7 +22,7 @@ $body = file_get_contents('php://input');
 
 $endurl =  (count($vars) > 0) ? $path . '?' . http_build_query($vars) : $path;
 
-$url = 'http:/APIVER/' . $endurl;
+$url = 'http:/APIVER' . $endurl;
 
 $command = new Command(array(
     'command' => '/usr/bin/curl'
