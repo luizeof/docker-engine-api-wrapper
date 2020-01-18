@@ -43,16 +43,24 @@ if (empty($body)) :
     $command->addArg('-d', $body);
 endif;
 
-if ($command->execute()) {
-    $exitCode = $command->getExitCode();
-} else {
-    $exitCode = $command->getExitCode();
-}
+if (isset($params["debug"])) :
 
-if ($exitCode > 0) :
-    http_response_code(500);
-    echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
+    echo $command->getExecCommand();
+
 else :
-    http_response_code(200);
-    echo $command->getOutput();
+
+    if ($command->execute()) {
+        $exitCode = $command->getExitCode();
+    } else {
+        $exitCode = $command->getExitCode();
+    }
+
+    if ($exitCode > 0) :
+        http_response_code(500);
+        echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
+    else :
+        http_response_code(200);
+        echo $command->getOutput();
+    endif;
+
 endif;
