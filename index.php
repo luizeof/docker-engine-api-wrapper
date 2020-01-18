@@ -103,14 +103,12 @@ array_splice($_REQUEST, 0, 1);
 $vars = $_REQUEST;
 
 $method = $_SERVER['REQUEST_METHOD'];
-echo $method;
 
 $body = file_get_contents('php://input');
-echo $body;
 
 $client = new DockerClient('/var/run/docker.sock');
 
-$url = (count($vars) > 0) ? $path . http_build_query($vars) : '';
+$url = (count($vars) > 0) ? $path . http_build_query($vars) : $path;
 
 echo $url;
 
