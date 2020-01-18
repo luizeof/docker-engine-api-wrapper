@@ -80,7 +80,7 @@ class DockerClient
     /**
      * Returns a human readable string from Curl in the event of an error.
      *
-     * @return bool|string 
+     * @return bool|string
      */
     public function getCurlError()
     {
