@@ -18,16 +18,18 @@ COPY index.php /var/www/html/index.php
 
 COPY .htaccess /var/www/html/.htaccess
 
-COPY docker-php-entrypoint /usr/local/bin/
+COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chown -R www-data:www-data /var/www/html
-
-ENTRYPOINT ["docker-php-entrypoint"]
 
 STOPSIGNAL SIGWINCH
 
 WORKDIR /var/www/html
 
 EXPOSE 80
+
+RUN ["chmod", "+x", "/entrypoint.sh"]
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["apache2-foreground"]
