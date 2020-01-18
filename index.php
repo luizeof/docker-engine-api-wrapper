@@ -19,6 +19,10 @@ $body = file_get_contents('php://input');
 
 $url =  (count($vars) > 0) ? $path . http_build_query($vars) : $path;
 
-echo $url;
+//echo $url;
 
-echo shell_exec('curl --unix-socket /var/run/docker.sock ' . 'APIVER' . $url);
+$cmd = 'curl --unix-socket /var/run/docker.sock ' . 'APIVER' . $url;
+
+echo $cmd;
+
+echo shell_exec($cmd);
