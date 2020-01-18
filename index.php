@@ -25,7 +25,7 @@ $endurl =  (count($vars) > 0) ? $path . '?' . http_build_query($vars) : $path;
 $url = 'http:/APIVER' . $endurl;
 
 $command = new Command(array(
-    'command' => '/usr/bin/curl'
+    'command' => 'curl'
 ));
 
 //$command->setOptions(array("escapeArgs" => false, "useExec" => true));
