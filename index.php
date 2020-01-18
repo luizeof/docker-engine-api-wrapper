@@ -50,7 +50,7 @@ class DockerClient
          *  @see Client.php:L14
          *  @see https://github.com/curl/curl/issues/1338
          */
-        return sprintf("http://unixsocket%s", $requestPath);
+        return sprintf("http:/localhost/%s", $requestPath);
     }
 
 
@@ -72,6 +72,15 @@ class DockerClient
             $payload = ($parameters);
             curl_setopt($this->curlClient, CURLOPT_POSTFIELDS, $payload);
         }
+
+        $writeFunction = function ($ch, $string) {
+            echo $string;
+            $length = strlen($string);
+            printf("Received %d byte\n", $length);
+            flush();
+            return $length;
+        };
+        curl_setopt($this->curlClient, CURLOPT_WRITEFUNCTION, $writeFunction);
 
         $result = curl_exec($this->curlClient);
 
