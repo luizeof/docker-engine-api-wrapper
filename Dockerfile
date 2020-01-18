@@ -6,7 +6,7 @@ LABEL version="1.0.0"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y jq && apt-get clean
+RUN apt-get update && apt-get install -y nano jq && apt-get clean
 
 RUN a2enmod rewrite headers
 
