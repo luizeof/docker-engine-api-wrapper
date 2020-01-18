@@ -26,8 +26,10 @@ class DockerManager
         if ('POST' === $method) {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
+        $url = "http://unixsocket{$this->ver}/{$path}{$vars}";
+        echo $url;
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, "http://unixsocket{$this->ver}/{$path}{$vars}");
+        curl_setopt($ch, CURLOPT_URL, $url);
         if ('POST' === $method) :
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
         endif;
