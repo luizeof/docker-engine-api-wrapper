@@ -1,6 +1,7 @@
 docker_engine_api:
   container_name: docker_engine_api
   image: luizeof/docker-engine-api
+  privileged: true
   environment:
     - AUTHUSER=myuser
     - AUTHPWD=mypwd
