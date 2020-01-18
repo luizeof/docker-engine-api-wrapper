@@ -39,7 +39,9 @@ $command->addArg($url);
 
 $command->addArg('-H', '"Content-Type: application/json"');
 
-$command->addArg('-d', $body);
+if (empty($body)) :
+    $command->addArg('-d', $body);
+endif;
 
 if ($command->execute()) {
     $exitCode = $command->getExitCode();
