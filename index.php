@@ -42,11 +42,8 @@ if (!empty($body) && $method == 'POST') :
 endif;
 
 if (isset($params["debug"])) :
-
     header('Content-Type:text/plain');
-
     echo $command->getExecCommand();
-
 else :
 
     header("Content-type: application/json; charset=utf-8");
