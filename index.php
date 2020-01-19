@@ -1,5 +1,7 @@
 <?php
 
+// https://github.com/mikehaertl/php-shellcommand
+
 use mikehaertl\shellcommand\Command;
 
 require 'vendor/autoload.php';
@@ -10,11 +12,11 @@ header("Pragma: no-cache");
 
 $params = $_REQUEST;
 
-$path = $_REQUEST["path"];
+$path = $params["path"];
 
-array_splice($_REQUEST, 0, 1);
+array_splice($params, 0, 1);
 
-$vars = $_REQUEST;
+$vars = $params;
 
 $method = $_SERVER['REQUEST_METHOD'];
 
