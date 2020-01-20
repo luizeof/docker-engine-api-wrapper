@@ -30,6 +30,10 @@ $url = 'http:/APIVER' . $endurl;
 
 $command = new Command(array('command' => 'curl'));
 
+if (isset($params["streaming"])) :
+    echo $command->nonBlockingMode = true;
+endif;
+
 $command->addArg('--unix-socket', '/var/run/docker.sock');
 
 if ($method == 'POST') :
