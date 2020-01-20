@@ -29,14 +29,17 @@ docker_engine_api:
 
 There are 2 variables that you need to configure:
 
-### AUTHUSER
+`AUTHUSER`:
 
 The username for basic authentication.
 
-### AUTHPWD
+`AUTHPWD`:
 
 The password for basic authentication.
 
 ## Usage
 
-
+```bash
+curl --location --request GET 'http://SERVERIP:8099/containers/json' \
+--header 'Authorization: Basic bJHVpcdmVvfgps5rdTfx'
+```
