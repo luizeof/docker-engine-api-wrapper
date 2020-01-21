@@ -66,7 +66,7 @@ else :
     else :
         http_response_code(200);
         if (isset($params["array"])) :
-            echo json_encode($command->getOutput());
+            echo json_encode(json_decode($command->getOutput()));
         else :
             echo $command->getOutput();
         endif;
