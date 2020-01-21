@@ -65,7 +65,7 @@ else :
         echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
     else :
         http_response_code(200);
-        echo json_decode($command->getOutput());
+        echo json_encode($command->getOutput());
     endif;
 
 endif;
