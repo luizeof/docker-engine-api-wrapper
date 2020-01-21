@@ -65,11 +65,11 @@ else :
         echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
     else :
         http_response_code(200);
-        if (isset($params["array"])) :
-            echo json_encode(json_decode($command->getOutput()));
-        else :
-            echo $command->getOutput();
-        endif;
+        //  if (isset($params["array"])) :
+        echo json_decode($command->getOutput());
+    // else :
+    //     echo $command->getOutput();
+    // endif;
 
     endif;
 
