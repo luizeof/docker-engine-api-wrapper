@@ -47,18 +47,27 @@ if (!empty($body) && $method == 'POST') :
     $command->addArg('-d', "'" . $body . "'");
 endif;
 
+
+
+header("Content-type: application/json; charset=utf-8");
+
+if ($command->execute()) {
+    $exitCode = $command->getExitCode();
+} else {
+    $exitCode = $command->getExitCode();
+}
+
 if (isset($params["debug"])) :
-    header('Content-Type:text/plain');
-    echo $command->getExecCommand();
+
+    if ($exitCode > 0) :
+        http_response_code(500);
+        echo json_encode(array("exit" => $exitCode,  "error" => $command->getError()));
+    else :
+        http_response_code(200);
+        echo $command->getOutput();
+    endif;
+
 else :
-
-    header("Content-type: application/json; charset=utf-8");
-
-    if ($command->execute()) {
-        $exitCode = $command->getExitCode();
-    } else {
-        $exitCode = $command->getExitCode();
-    }
 
     if ($exitCode > 0) :
         http_response_code(500);
